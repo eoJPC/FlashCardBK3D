@@ -1,182 +1,273 @@
-:root {
-  --background-img: url('https://i.pinimg.com/736x/6b/18/6b/6b186bec13213a5c7c01627315d124a7.jpg');
-  --card-width: 320px;
-  --card-height: 440px;
-  --card-radius: 26px;
-  --card-shadow: 0 8px 32px 0 rgba(30,34,40,0.32), 0 1.5px 8px 0 rgba(0,0,0,0.09);
-  --card-gradient-front: linear-gradient(135deg, #23272b 65%, #d5dbe5 100%);
-  --card-gradient-back: linear-gradient(120deg, #eaeaea 70%, #ffffff 100%);
-  --card-border: 2.7px solid #ececec70;
-  --card-text-front: #e8eaf3;
-  --card-text-back: #23272b;
-  --card-accent: #c1d2e6;
-  --card-hover-scale: 1.04;
-  --card-flip-transition: transform 0.97s cubic-bezier(.27,.7,.39,1.16);
-  --card-focus: 0 0 0 4px #f6c53188;
-  --gap: 44px;
-  --overlay-bg: rgba(30,33,38, 0.82);
-  --font-family: 'Segoe UI', Arial, sans-serif;
+```css name=style.css
+/* ================== Black & White Psychedelic Animated Background ================== */
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    color: #f5f5f5;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    background: #111;
 }
 
-body {
-  min-height: 100vh;
-  margin: 0;
-  font-family: var(--font-family);
-  position: relative;
-  overflow-x: hidden;
-}
-.background-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background: var(--background-img) no-repeat center center/cover;
-}
-.app {
-  position: relative;
-  z-index: 1;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.flashcards {
-  width: 100vw;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.flashcards__container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap);
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  position: relative;
+.psy-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: #111;
 }
 
-.flashcard {
-  width: var(--card-width);
-  height: var(--card-height);
-  border-radius: var(--card-radius);
-  background: transparent;
-  box-shadow: var(--card-shadow);
-  border: var(--card-border);
-  cursor: pointer;
-  perspective: 1800px;
-  outline: none;
-  position: relative;
-  transition:
-    box-shadow 0.3s,
-    transform 0.22s cubic-bezier(.18,.78,.22,1.06);
-  will-change: transform;
-  user-select: none;
-  backface-visibility: hidden;
-  margin-bottom: 32px;
-}
-.flashcard:focus {
-  box-shadow: var(--card-shadow), var(--card-focus);
-}
-.flashcard:hover:not(.is-flipped):not(:active) {
-  transform: scale(var(--card-hover-scale)) translateY(-8px);
-  z-index: 3;
-}
-.flashcard:active {
-  transform: scale(0.98);
-}
-.flashcard__faces {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: var(--card-flip-transition);
-}
-.flashcard.is-flipped .flashcard__faces {
-  transform: rotateY(180deg);
+.psy-bg::before, .psy-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    /* SVG wave pattern */
+    background: url(https://i.pinimg.com/736x/fa/de/38/fade38cd5c1f384eca9cb5678f354c97.jpg);
+    opacity: 0.14;
+    animation: move-waves 22s linear infinite alternate;
 }
 
-.flashcard__face {
-  width: 100%;
-  height: 100%;
-  border-radius: var(--card-radius);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 0; left: 0;
-  backface-visibility: hidden;
-  box-sizing: border-box;
-  padding: 46px 32px 36px;
-  gap: 18px;
-  transition: background 0.32s, color 0.32s;
-  background-blend-mode: soft-light;
+.psy-bg::after {
+    /* Add a subtle moving radial gradient for depth */
+    background: radial-gradient(circle at 60% 30%, rgba(255,255,255,0.07) 0%, rgba(0,0,0,0.0) 70%);
+    opacity: 0.25;
+    animation: move-radial 24s linear infinite alternate;
 }
 
-.flashcard__face--front {
-  background: var(--card-gradient-front);
-  color: var(--card-text-front);
-  border-radius: var(--card-radius);
-  box-shadow: 0 1.5px 18px 0 #45494b33;
-  z-index: 2;
-}
-.flashcard__face--back {
-  background: var(--card-gradient-back);
-  color: var(--card-text-back);
-  transform: rotateY(180deg);
-  border-radius: var(--card-radius);
-  box-shadow: 0 1.5px 18px 0 #5e6d7e22;
-  z-index: 2;
+@keyframes move-waves {
+    0% { background-position: 0 0; }
+    100% { background-position: 240px 60px; }
 }
 
-.flashcard__title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  margin-bottom: 6px;
-  color: var(--card-accent);
-  text-shadow: 0 1.5px 8px #1e222833;
+@keyframes move-radial {
+    0% { background-position: 60% 30%; }
+    100% { background-position: 40% 70%; }
 }
-.flashcard__icon {
-  font-size: 2.25rem;
-  margin-bottom: 10px;
-  line-height: 1;
-}
-.flashcard__content {
-  font-size: 1.13rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  text-align: center;
-  padding: 0 2px;
-  color: inherit;
-  text-shadow: 0 1.5px 8px #1e222833;
-}
-@media (max-width: 1100px) {
-  .flashcards__container {
-    gap: 22px;
-  }
-  .flashcard {
-    width: 92vw;
-    max-width: 370px;
-    margin-bottom: 24px;
-  }
-}
-@media (max-width: 700px) {
-  .flashcards__container {
+
+/* ================== Header ================== */
+header {
+    z-index: 2;
+    position: relative;
+    padding-top: 60px;
+    padding-bottom: 28px;
+    display: flex;
     flex-direction: column;
-    gap: 18px;
-  }
-  .flashcard {
-    width: 98vw;
-    max-width: 340px;
-    min-width: 0;
-    margin-bottom: 16px;
-  }
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(24,24,24,0.98) 62%, rgba(24,24,24,0.60) 100%);
+    box-shadow: 0 6px 32px 0 #1118;
+    border-bottom: 2px solid #fff2;
 }
 
-/* Extra: slick 3D shadow when flipped */
-.flashcard.is-flipped {
-  box-shadow: 0 16px 44px 0 #18202b66, 0 2.5px 12px 0 #818ba288;
-  z-index: 4;
+.perfil {
+    width: 144px;
+    height: 144px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 32px 0 #fff3;
+    border: 4px solid #fff;
+    outline: 4px solid #222;
+    background: #fff;
 }
+
+header h1 {
+    font-size: 2.65rem;
+    color: #fff;
+    margin: 0;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 16px #111c;
+}
+
+.subtitle {
+    font-size: 1.3rem;
+    color: #e4e4e4;
+    margin-top: 5px;
+    margin-bottom: 0;
+    text-shadow: 0 1.5px 8px #0005;
+    font-weight: 500;
+}
+
+/* ================== Main/cards ================== */
+main {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px 16px 60px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.card {
+    background: linear-gradient(135deg, rgba(22,22,22,0.92) 0%, #333 80%, #fff 180%);
+    border-radius: 26px;
+    box-shadow: 0 4px 36px 0 #0007, 0 1px 2px 0 #fff1;
+    border: 2px solid #fff2;
+    padding: 36px 32px 28px 32px;
+    min-width: 320px;
+    max-width: 390px;
+    flex: 1 1 340px;
+    margin: 0 8px;
+    position: relative;
+    backdrop-filter: blur(2.5px) brightness(1.07);
+    transition: transform 0.24s cubic-bezier(.33,1.32,.43,0.98), box-shadow 0.22s, border 0.22s;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: scale(1.03) translateY(-9px) rotateZ(-0.3deg);
+    box-shadow: 0 12px 44px 0 #fff4, 0 1.5px 16px 0 #0003;
+    border-color: #fff;
+}
+
+.card h2 {
+    margin-top: 0;
+    color: #fff;
+    letter-spacing: 0.04em;
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+    text-shadow: 0 1.5px 8px #000a;
+    font-weight: 700;
+}
+
+.card ul, .card p {
+    color: #f5f5f5;
+    font-size: 1.13rem;
+    margin: 0 0 8px 0;
+    padding-left: 14px;
+    line-height: 1.65;
+    text-shadow: 0 1.5px 8px #0007;
+}
+
+.card ul {
+    margin-bottom: 6px;
+}
+
+.card li {
+    margin-bottom: 4px;
+}
+
+.projeto {
+    margin-top: 8px;
+    margin-bottom: 6px;
+    background: linear-gradient(90deg, #222a 60%, #fff2 100%);
+    border-radius: 16px;
+    padding: 15px 18px;
+    box-shadow: 0 1.5px 12px 0 #fff2;
+}
+
+.psy-link {
+    color: #fff;
+    text-decoration: underline wavy 2px #fff;
+    font-weight: 600;
+    transition: color 0.18s, text-decoration-color 0.22s;
+    word-break: break-all;
+}
+
+.psy-link:hover, .psy-link:focus {
+    color: #111;
+    text-decoration-color: #111;
+    outline: none;
+}
+
+.finalizado {
+    background: linear-gradient(135deg, #111 0%, #fff 100%);
+    color: #222;
+    border: 2px solid #fff;
+    box-shadow: 0 8px 36px 0 #fff2, 0 1.5px 10px 0 #0003;
+    text-align: center;
+    font-size: 1.18rem;
+    font-weight: bold;
+}
+
+.finalizado h2 {
+    color: #222;
+    text-shadow: 0 1px 9px #fff8;
+    margin-bottom: 0;
+}
+
+/* ================== Footer ================== */
+footer {
+    z-index: 2;
+    position: relative;
+    width: 100vw;
+    text-align: center;
+    padding: 24px 0 18px 0;
+    background: linear-gradient(to top, rgba(24,24,24,0.92) 60%, rgba(24,24,24,0.18) 100%);
+    color: #e4e4e4;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.03em;
+    box-shadow: 0 -2.5px 22px 0 #0005;
+    border-top: 2.5px solid #fff2;
+}
+
+/* ================== Responsivo ================== */
+@media (max-width: 950px) {
+    main {
+        flex-direction: column;
+        gap: 18px;
+        padding: 36px 2vw 40px 2vw;
+    }
+    .card {
+        max-width: 98vw;
+        min-width: 0;
+        width: 98vw;
+        margin: 0 auto 22px auto;
+    }
+    header {
+        padding-top: 38px;
+        padding-bottom: 24px;
+    }
+}
+@media (max-width: 600px) {
+    .perfil {
+        width: 96px;
+        height: 96px;
+    }
+    header h1 {
+        font-size: 1.5rem;
+    }
+    .subtitle {
+        font-size: 1rem;
+    }
+    .card {
+        padding: 20px 8px 16px 8px;
+        font-size: 1rem;
+    }
+
+    }
+    main {
+        padding: 22px 3px 20px 3px;
+    }
+}
+
+/* ================== Scrollbar Custom ================== */
+::-webkit-scrollbar {
+    width: 11px;
+    background: #333;
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #fff 0%, #222 100%);
+    border-radius: 8px;
+    border: 2px solid #222;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #fff;
+}
+
+/* ================== Selection highlight ================== */
+::selection {
+    background: #fff8;
+    color: #111;
+}
+```
